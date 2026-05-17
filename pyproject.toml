@@ -1,0 +1,6 @@
+[project]
+name = "eml_ucns"
+version = "0.1.1"
+description = "EML × UCNS Bridge for The Interdependency"
+dependencies = ["ucns"]
+requires-python = ">=3.9"
