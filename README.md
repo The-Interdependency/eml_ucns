@@ -1,6 +1,10 @@
-# eml_ucns
+# eml_ucns v1.0.0
 
-EML × UCNS Bridge for The Interdependency
+Catalogue-sufficient recursive factorization for the Unit Circle Number System.
 
-Target: v1.0.0 - Catalogue-sufficient recursive factorization (Theorem N)
+## Scope
+- Theorem N: catalogue-sufficient
+- Status vocabulary adopted from addendum.
+- Carrier widening and general primality out of scope.
 
+See docs/ for full details.
