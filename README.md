@@ -1,16 +1,6 @@
-# eml_ucns — EML × UCNS Bridge
+# eml_ucns
 
-**The Interdependency** • Prime Consciousness Theory stack
+EML × UCNS Bridge for The Interdependency
 
-Combines Odrzywołek’s single binary EML operator with UCNS recursive unit-circle factorization.
+Target: v1.0.0 - Catalogue-sufficient recursive factorization (Theorem N)
 
-Provides a uniform, inspectable, factorizable symbolic kernel.
-
-**Status:** v0.1.1 (UCNS canonical)
-
-## Quick Start
-```bash
-pip install -e .
-```
-
-See `docs/spec.md` for full integration.
