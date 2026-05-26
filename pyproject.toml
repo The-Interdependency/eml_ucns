@@ -2,3 +2,4 @@
 name = "eml_ucns"
 version = "1.0.0"
 description = "eml-enhanced UCNS v1.0.0"
+license = { text = "AGPL-3.0-or-later" }
