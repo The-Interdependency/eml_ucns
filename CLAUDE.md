@@ -7,19 +7,30 @@ This file gives AI assistants context needed to work effectively in this reposit
 ## What This Repo Is
 
 `eml_ucns` (pip package: **`eml_ucns`**, v1.0.0) is the **EML-enhanced packaging
-of the Unit Circle Number System** focused on **catalogue-sufficient recursive
-factorization** (Theorem N). It is a thin, early-stage distribution that adapts
-the UCNS v1.0 factorization frontier for EML (UnitCircle / prime-distribution)
-experiment workflows.
+of the Unit Circle Number System**. Its purpose is to define the **EML operator**
+and an **EML expression tree**, and to bridge those trees into UCNS objects so the
+**catalogue-sufficient recursive factorization** frontier (Theorem N) can recover
+the original trees.
+
+The EML operator is `eml(x, y) = exp(x) - ln(y)` over complex numbers. EML trees
+are encoded as UCNS recursive payloads on the Möbius unit circle (see
+`docs/spec.md`).
 
 The canonical UCNS engine and its full theorem frontier live in
-`The-Interdependency/ucns`. This repo packages the catalogue-sufficient slice
-and adopts the same status vocabulary; it does **not** restate or extend any
-UCNS-A proof beyond what the source repo defends.
+`The-Interdependency/ucns`; `eml_ucns` imports it as a sibling package. This repo
+packages the catalogue-sufficient slice and adopts the same status vocabulary; it
+does **not** restate or extend any UCNS-A proof beyond what the source repo defends.
 
-**Python requirement:** ≥ 3.8 (assumed from UCNS lineage — `hmmm`, not declared in `pyproject.toml`)
-**External dependencies:** none expected (stdlib only, following UCNS)
-**License:** Apache 2.0
+**Status:** early-stage. The EML operator and node type are implemented; the
+EML↔UCNS bridge is a stub (`core.py` ends with `TODO` / placeholder code).
+
+- **Language:** Python (CI runs on 3.11; no floor declared in `pyproject.toml`)
+- **Runtime deps:** stdlib only (`cmath`, `fractions`, `dataclasses`, `typing`).
+  The UCNS bridge optionally imports `ucns`, guarded by a `try/except ImportError`.
+- **License:** **AGPL-3.0-or-later, dual-licensed with a commercial option**
+  (see `LICENSE` and `LICENSE-COMMERCIAL.md`). The `LICENSE` file currently holds
+  an interim notice — the full verbatim AGPL text is not yet pasted in.
+- **Version:** 1.0.0
 
 ---
 
@@ -31,8 +42,9 @@ UCNS-A proof beyond what the source repo defends.
 - **Carrier widening and general recursive primality are out of scope** —
   identical to the UCNS v1.0 boundary.
 
-See `docs/` and `ucns-theorem-n.md` for details (both are currently thin —
-treat their contents as authoritative only where present).
+See `docs/spec.md` (v0.1.1) and `docs/claims-ledger.md` for details. Both are thin
+— treat their contents as authoritative only where present. `ucns-theorem-n.md` is
+a placeholder.
 
 ---
 
@@ -40,53 +52,101 @@ treat their contents as authoritative only where present).
 
 ```
 eml_ucns/
-  __init__.py          Package marker / public surface (minimal)
-  core.py              Core entry point (small — inspect before relying on it)
+  __init__.py          Public surface: re-exports eml, EMLNode from core
+  core.py              EML operator (eml), EMLNode tree, EML->UCNS bridge (stub)
 
-docs/                  Supporting documentation (evolving)
-ucns-theorem-n.md      Theorem N note (stub-sized — verify before citing)
+docs/
+  spec.md              EML-UCNS integration spec (v0.1.1)
+  claims-ledger.md     Claims ledger (thin, to be expanded from ucns)
+
+ucns-theorem-n.md      Theorem N note (placeholder)
 CHANGELOG.md           Version history
 pyproject.toml         Package metadata (name = eml_ucns, version = 1.0.0)
-LICENSE                Apache 2.0
+LICENSE                AGPL-3.0-or-later interim notice (full text pending)
+LICENSE-COMMERCIAL.md  Commercial dual-license terms
 README.md
 CLAUDE.md              This file
+.github/workflows/ci.yml   CI: install + import smoke test on Python 3.11
+.agents/skills/        Org-wide build/test skills (msdmd, meta-module-build, test-build)
 ```
 
 ---
 
-## Development Workflow
+## Public Surface
+
+`core.py` provides:
+
+- `eml(x: complex, y: complex) -> complex` — the core EML binary operator,
+  `exp(x) - ln(y)`.
+- `EMLNode` — a `dataclass` representing a binary EML tree node, with an
+  `EMLNode.leaf(value)` static constructor.
+- `eml_tree_to_ucns(tree, depth=0)` — bridge to `ucns.UCNSObject`. **Stub:** raises
+  `ImportError` if `ucns` is absent, and the non-leaf branch returns an unfinished
+  `UCNSObject(...)` placeholder. Do not rely on it until completed.
+
+`__init__.py` re-exports only `eml` and `EMLNode`.
+
+---
+
+## Build / Test / Lint / Run
 
 ```bash
-# Install editable
+# Install editable (no build-system table declared; uses pip default backend)
 pip install -e .
 
-# No test runner is configured yet. When adding tests, prefer the UCNS
-# convention: python -m unittest discover, unless pytest is introduced.
+# Smoke test — this is what CI runs:
+python -c "import eml_ucns"
+
+# Exercise the operator:
+python -c "from eml_ucns import eml; print(eml(0, 1))"   # -> (1+0j)
 ```
+
+- **No test suite exists yet.** When adding tests, prefer the UCNS convention
+  (`python -m unittest discover`) unless pytest is introduced, or follow the
+  `test-build` skill's `# === CONTRACTS ===` convention.
+- **No linter is configured.** Prefer `ruff` when adding one.
+- **CI** (`.github/workflows/ci.yml`) runs on push to `main` and on all PRs:
+  checkout, set up Python 3.11, `pip install -e .`, then `python -c "import eml_ucns"`.
+
+---
+
+## Architecture & Key Concepts
+
+- **EML operator + tree:** `eml(x, y) = exp(x) - ln(y)`; `EMLNode` builds recursive
+  expression trees with leaves carrying complex values.
+- **EML↔UCNS bridge:** `EMLNode` trees are meant to encode as `UCNSObject` recursive
+  payloads — nesting depth / branching mapped to angles + face states on the Möbius
+  unit circle — enabling exact factorization back to the original tree via
+  `ucns.factor_search_v08`. This bridge is currently a stub.
+- **`ucns` is an optional sibling dependency**, imported defensively. Code paths that
+  need it raise a clear `ImportError` rather than failing at import time.
 
 ---
 
 ## Key Conventions
 
 - **Mirror UCNS conventions.** This package tracks `The-Interdependency/ucns`:
-  no runtime dependencies, `Fraction`/`math`/stdlib only, and the same status
-  vocabulary. Do not introduce divergent algebra here.
-- **No proof-scope inflation.** `SEQ-PRIME` / completeness claims are only
-  absolute inside a defended-complete domain as defined in `ucns`. Do not
-  promote a claim here that the source repo has not defended.
-- **`pyproject.toml` is minimal** — it declares only name, version, and
-  description. Add build-system, Python floor, and metadata when packaging
+  stdlib-only runtime, `Fraction`/`cmath`/`math`, and the same status vocabulary.
+  Do not introduce divergent algebra here.
+- **No proof-scope inflation.** `SEQ-PRIME` / completeness claims are only absolute
+  inside a defended-complete domain as defined in `ucns`. Do not promote a claim
+  here that the source repo has not defended.
+- **`pyproject.toml` is minimal** — it declares only name, version, description, and
+  license. There is no build-system table or Python floor; add them when packaging
   for real distribution.
+- **License is AGPL-3.0-or-later (dual commercial).** Keep this consistent across
+  `pyproject.toml`, `LICENSE`, and `LICENSE-COMMERCIAL.md`. Do not relabel as Apache.
 - Unknown fields are marked **`hmmm`**, not guessed (see doctrine below).
 
 ---
 
-## What Does Not Exist Yet
+## Conventions & Gotchas
 
-- No build-system table, Python floor, or dependency list in `pyproject.toml` (`hmmm`)
-- No test suite or CI
-- No linting config (prefer `ruff` when adding)
-- `core.py` and `ucns-theorem-n.md` are small — substantial implementation may be incomplete
+- `core.py`'s `eml_tree_to_ucns` non-leaf branch is an intentional placeholder
+  (`UCNSObject(...)`) — it will not run. Complete the angle + face encoding before use.
+- The `LICENSE` file does not yet contain the verbatim AGPL text; it must be pasted
+  in before any merge or public release.
+- `docs/`, `ucns-theorem-n.md`, and `claims-ledger.md` are stubs — verify before citing.
 
 ---
 
@@ -94,7 +154,7 @@ pip install -e .
 
 | Repo | Role |
 |------|------|
-| The-Interdependency/ucns | Canonical UCNS engine and full theorem frontier (upstream) |
+| The-Interdependency/ucns | Canonical UCNS engine and full theorem frontier (upstream / optional dep) |
 | The-Interdependency/interdependent-lib | Meta-package bundling the UCNS-family libraries |
 | erinepshovel-code/UnitCircle | EML visualization / prime-distribution experiment scripts |
 
@@ -106,7 +166,6 @@ pip install -e .
 - Feature branches: `feat/<description>`, `fix/<description>`, `docs/<description>`, `chore/<description>`
 - Commit style: Conventional Commits (`feat(eml_ucns):`, `fix(core):`, etc.)
 - Author: Erin Patrick Spencer (wayseer@interdependentway.org)
-- License: Apache 2.0
 
 ## Agent module-build doctrine
 
@@ -116,4 +175,6 @@ UI panel, migration, or experiment, read:
 `./.agents/skills/meta-module-build/SKILL.md`
 
 New module work should start with a `MODULE_BUILD` block. Unknown fields must
-be marked `hmmm`, not guessed.
+be marked `hmmm`, not guessed. Related skills: `.agents/skills/msdmd/SKILL.md`
+(the underlying self-declared-metadata convention) and
+`.agents/skills/test-build/SKILL.md` (contract tests).
