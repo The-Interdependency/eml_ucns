@@ -1,3 +1,24 @@
+# === MODULE_BUILD ===
+# id: eml_ucns_core
+#   module_name: core
+#   module_kind: engine
+#   summary: core EML binary operator (exp(x)-log(y)) and EML-tree to UCNS embedding
+#   owner: Erin Spencer
+#   public_surface: eml, EMLNode, eml_tree_to_ucns
+#   internal_surface: none
+#   auth_boundary: none
+#   storage_boundary: none
+#   network_boundary: none
+#   user_data_boundary: none
+#   admin_only: false
+#   tests: hmmm
+#   rollout: default_enabled
+#   rollback: remove module and its references
+#   requires: none
+#   since: 2026-06-02
+#   unresolved: early-stage package; surface may widen as Theorem-N packaging firms up
+# === END MODULE_BUILD ===
+
 import cmath
 from fractions import Fraction
 from dataclasses import dataclass
