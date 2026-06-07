@@ -27,9 +27,8 @@ EML↔UCNS bridge is a stub (`core.py` ends with `TODO` / placeholder code).
 - **Language:** Python (CI runs on 3.11; no floor declared in `pyproject.toml`)
 - **Runtime deps:** stdlib only (`cmath`, `fractions`, `dataclasses`, `typing`).
   The UCNS bridge optionally imports `ucns`, guarded by a `try/except ImportError`.
-- **License:** **AGPL-3.0-or-later, dual-licensed with a commercial option**
-  (see `LICENSE` and `LICENSE-COMMERCIAL.md`). The `LICENSE` file currently holds
-  an interim notice — the full verbatim AGPL text is not yet pasted in.
+- **License:** **MIT** (see `LICENSE`). Previously AGPL-3.0-or-later +
+  commercial; relicensed to MIT for frictionless adoption.
 - **Version:** 1.0.0
 
 ---
@@ -62,8 +61,7 @@ docs/
 ucns-theorem-n.md      Theorem N note (placeholder)
 CHANGELOG.md           Version history
 pyproject.toml         Package metadata (name = eml_ucns, version = 1.0.0)
-LICENSE                AGPL-3.0-or-later interim notice (full text pending)
-LICENSE-COMMERCIAL.md  Commercial dual-license terms
+LICENSE                MIT
 README.md
 CLAUDE.md              This file
 .github/workflows/ci.yml   CI: install + import smoke test on Python 3.11
@@ -134,8 +132,8 @@ python -c "from eml_ucns import eml; print(eml(0, 1))"   # -> (1+0j)
 - **`pyproject.toml` is minimal** — it declares only name, version, description, and
   license. There is no build-system table or Python floor; add them when packaging
   for real distribution.
-- **License is AGPL-3.0-or-later (dual commercial).** Keep this consistent across
-  `pyproject.toml`, `LICENSE`, and `LICENSE-COMMERCIAL.md`. Do not relabel as Apache.
+- **License is MIT.** Keep this consistent across `pyproject.toml` and `LICENSE`.
+  (Previously AGPL-3.0-or-later + commercial; relicensed to MIT.)
 - Unknown fields are marked **`hmmm`**, not guessed (see doctrine below).
 
 ---
@@ -144,8 +142,6 @@ python -c "from eml_ucns import eml; print(eml(0, 1))"   # -> (1+0j)
 
 - `core.py`'s `eml_tree_to_ucns` non-leaf branch is an intentional placeholder
   (`UCNSObject(...)`) — it will not run. Complete the angle + face encoding before use.
-- The `LICENSE` file does not yet contain the verbatim AGPL text; it must be pasted
-  in before any merge or public release.
 - `docs/`, `ucns-theorem-n.md`, and `claims-ledger.md` are stubs — verify before citing.
 
 ---
