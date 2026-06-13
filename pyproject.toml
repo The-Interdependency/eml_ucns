@@ -2,4 +2,4 @@
 name = "eml_ucns"
 version = "1.0.0"
 description = "eml-enhanced UCNS v1.0.0"
-license = { text = "MIT" }
+license = { text = "MPL-2.0" }

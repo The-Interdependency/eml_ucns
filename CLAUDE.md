@@ -27,8 +27,9 @@ EML↔UCNS bridge is a stub (`core.py` ends with `TODO` / placeholder code).
 - **Language:** Python (CI runs on 3.11; no floor declared in `pyproject.toml`)
 - **Runtime deps:** stdlib only (`cmath`, `fractions`, `dataclasses`, `typing`).
   The UCNS bridge optionally imports `ucns`, guarded by a `try/except ImportError`.
-- **License:** **MIT** (see `LICENSE`). Previously AGPL-3.0-or-later +
-  commercial; relicensed to MIT for frictionless adoption.
+- **License:** **MPL-2.0** (see `LICENSE`). Relicensed from MIT to MPL-2.0;
+  weak copyleft — embed anywhere, but changes to these files must be published.
+  (Earlier history: AGPL-3.0-or-later + commercial, then MIT.)
 - **Version:** 1.0.0
 
 ---
@@ -61,7 +62,7 @@ docs/
 ucns-theorem-n.md      Theorem N note (placeholder)
 CHANGELOG.md           Version history
 pyproject.toml         Package metadata (name = eml_ucns, version = 1.0.0)
-LICENSE                MIT
+LICENSE                MPL-2.0
 README.md
 CLAUDE.md              This file
 .github/workflows/ci.yml   CI: install + import smoke test on Python 3.11
@@ -132,8 +133,8 @@ python -c "from eml_ucns import eml; print(eml(0, 1))"   # -> (1+0j)
 - **`pyproject.toml` is minimal** — it declares only name, version, description, and
   license. There is no build-system table or Python floor; add them when packaging
   for real distribution.
-- **License is MIT.** Keep this consistent across `pyproject.toml` and `LICENSE`.
-  (Previously AGPL-3.0-or-later + commercial; relicensed to MIT.)
+- **License is MPL-2.0.** Keep this consistent across `pyproject.toml` and `LICENSE`.
+  (Relicensed from MIT to MPL-2.0; earlier AGPL-3.0-or-later + commercial.)
 - Unknown fields are marked **`hmmm`**, not guessed (see doctrine below).
 
 ---
