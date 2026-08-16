@@ -2,25 +2,31 @@
 # id: eml_ucns_core
 #   module_name: core
 #   module_kind: engine
-#   summary: core EML binary operator (exp(x)-log(y)) and EML-tree to UCNS embedding
+#   summary: core EML binary operator (exp(x)-log(y)) and fail-closed deprecated UCNS bridge boundary
 #   owner: Erin Spencer
-#   public_surface: eml, EMLNode, eml_tree_to_ucns
+#   public_surface: eml, EMLNode, eml_tree_to_ucns, DeprecatedUCNSBridgeError
 #   internal_surface: none
 #   auth_boundary: none
 #   storage_boundary: none
 #   network_boundary: none
 #   user_data_boundary: none
 #   admin_only: false
-#   tests: hmmm
+#   tests: tests.test_deprecated_ucns_bridge
 #   rollout: default_enabled
 #   rollback: remove module and its references
 #   requires: none
 #   since: 2026-06-02
-#   unresolved: early-stage package; surface may widen as Theorem-N packaging firms up
+#   unresolved: hmmm; no current-UCNS adapter or Theorem-N implementation is selected
 # === END MODULE_BUILD ===
 
+# === CONTRACTS ===
+# id: eml_ucns_bridge_fails_closed_deprecated
+#   given: any call to eml_tree_to_ucns
+#   then: raises DeprecatedUCNSBridgeError and selects no replacement
+#   class: correctness
+# === END CONTRACTS ===
+
 import cmath
-from fractions import Fraction
 from dataclasses import dataclass
 from typing import Union, Optional
 
@@ -41,26 +47,15 @@ class EMLNode:
         node.value = value
         return node
 
-# UCNS canonical import
-try:
-    from ucns import UCNSObject
-except ImportError:
-    UCNSObject = None
+class DeprecatedUCNSBridgeError(RuntimeError):
+    """The removed v1 EML-to-UCNS bridge was incompatible with current UCNS."""
+
 
 def eml_tree_to_ucns(tree: EMLNode, depth: int = 0):
-    """Encode EML tree as UCNS object (stub — full version in bridge)"""
-    if UCNSObject is None:
-        raise ImportError("ucns package required")
-    if tree.is_leaf:
-        return UCNSObject(
-            n_dec=2,
-            n_min=2,
-            theta_plus=[(Fraction(0), None)],
-            theta_minus=[(Fraction(0), None)],
-            f_plus=[0],
-            f_minus=[0]
-        )
-    left_obj = eml_tree_to_ucns(tree.left, depth + 1)
-    right_obj = eml_tree_to_ucns(tree.right, depth + 1)
-    # TODO: full angle + face encoding
-    return UCNSObject(...)  # placeholder for next iteration
+    """Fail closed: the v1 bridge is deprecated and has no current replacement."""
+    del tree, depth
+    raise DeprecatedUCNSBridgeError(
+        "eml_tree_to_ucns is DEPRECATED: it targeted the removed UCNSObject "
+        "surface and never implemented non-leaf construction; hmmm: no "
+        "current-UCNS adapter or theorem bridge is selected"
+    )
