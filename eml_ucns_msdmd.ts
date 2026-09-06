@@ -44,6 +44,5 @@ export default defineMsdmdCollection({
     }
   ],
   "gaps": [],
-  "repo": "eml_ucns",
-  "source_commit": "57ba9cc"
+  "repo": "eml_ucns"
 });
