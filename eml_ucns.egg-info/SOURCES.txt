@@ -1,0 +1,9 @@
+LICENSE
+README.md
+pyproject.toml
+eml_ucns/__init__.py
+eml_ucns/core.py
+eml_ucns.egg-info/PKG-INFO
+eml_ucns.egg-info/SOURCES.txt
+eml_ucns.egg-info/dependency_links.txt
+eml_ucns.egg-info/top_level.txt
